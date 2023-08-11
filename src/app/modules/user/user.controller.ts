@@ -13,6 +13,20 @@ const insertIntoDb = async (req: Request, res: Response) => {
     res.send(error);
   }
 };
+
+const insertOrUpdate = async (req: Request, res: Response) => {
+  try {
+    const profile = await userService.addOrUpdate(req.body);
+    res.json({
+      success: true,
+      message: "User added successfully",
+      data: profile,
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};
 export const userController = {
   insertIntoDb,
+  insertOrUpdate
 };
