@@ -30,7 +30,13 @@ const addOrUpdate = async (data: Profile): Promise<Profile> => {
   return result;
 };
 
+const getUsers = async () => {
+  const users = await prisma.user.findMany();
+  return users;
+};
+
 export const userService = {
   insertIntoDb,
-  addOrUpdate
+  addOrUpdate,
+  getUsers,
 };

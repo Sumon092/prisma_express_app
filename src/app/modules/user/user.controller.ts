@@ -26,7 +26,20 @@ const insertOrUpdate = async (req: Request, res: Response) => {
     res.send(error);
   }
 };
+const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await userService.getUsers();
+    res.json({
+      success: true,
+      message: "Users retrieve successfully",
+      data: users,
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};
 export const userController = {
   insertIntoDb,
-  insertOrUpdate
+  insertOrUpdate,
+  getUsers,
 };
