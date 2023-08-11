@@ -38,8 +38,22 @@ const getUsers = async (req: Request, res: Response) => {
     res.send(error);
   }
 };
+const getUser = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const user = await userService.getUser(id);
+    res.json({
+      success: true,
+      message: "Users retrieve successfully",
+      data: user,
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};
 export const userController = {
   insertIntoDb,
   insertOrUpdate,
   getUsers,
+  getUser,
 };

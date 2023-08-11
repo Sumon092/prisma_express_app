@@ -25,7 +25,7 @@ model Profile {
   id     Int    @id @default(autoincrement())
   bio    String
   userId Int    @unique
-  users   User   @relation(fields: [userId], references: [id])
+  users  User   @relation(fields: [userId], references: [id])
 
   @@map("profiles")
 }
