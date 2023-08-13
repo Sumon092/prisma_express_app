@@ -22,8 +22,21 @@ const getAllPost = async () => {
   });
   return post;
 };
+const getPost = async (id: number) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      author: true,
+      categories: true,
+    },
+  });
+  return post;
+};
 
 export const postService = {
   addPost,
   getAllPost,
+  getPost,
 };
