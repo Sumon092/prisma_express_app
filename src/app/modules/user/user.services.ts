@@ -1,4 +1,5 @@
 import { PrismaClient, Profile, User } from "@prisma/client";
+import { profile } from "console";
 const prisma = new PrismaClient();
 const insertIntoDb = async (data: User): Promise<User> => {
   const result = await prisma.user.create({
@@ -29,7 +30,6 @@ const addOrUpdate = async (data: Profile): Promise<Profile> => {
   });
   return result;
 };
-
 const getUsers = async () => {
   const users = await prisma.user.findMany({
     //! to show email only
@@ -38,9 +38,9 @@ const getUsers = async () => {
     //   name: true,
     // },
     //! to show profile data (another table)
-    include: {
-      profiles: true,
-    },
+    // include: {
+    //   profile: true,
+    // },
   });
   return users;
 };
@@ -50,7 +50,7 @@ const getUser = async (id: number) => {
       id,
     },
     include: {
-      profiles: true,
+      profile: true,
     },
   });
   return user;

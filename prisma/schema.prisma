@@ -15,8 +15,8 @@ model User {
   email    String   @unique
   name     String
   role     String
-  profiles Profile?
   posts    Post[]
+  profile Profile?
 
   @@map("users")
 }
