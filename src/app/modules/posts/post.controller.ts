@@ -14,8 +14,9 @@ const addPost = async (req: Request, res: Response) => {
   }
 };
 const getAllPost = async (req: Request, res: Response) => {
+  const options = req.query;
   try {
-    const posts = await postService.getAllPost();
+    const posts = await postService.getAllPost(options);
     res.send({
       success: true,
       message: "posts retrieved successfully",
