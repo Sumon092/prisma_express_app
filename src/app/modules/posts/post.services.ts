@@ -103,12 +103,34 @@ const deletePost = async (id: number) => {
   return result;
 };
 
+const learnAggregateAndGroupingService = async () => {
+  const result = await prisma.post.aggregate({
+    _avg: {
+      categoryId: true,
+      authorId: true,
+    },
+    _count: {
+      categoryId: true,
+    },
+    _sum: {
+      categoryId: true,
+    },
+  });
+  console.log(result);
+  if (result) {
+    return result;
+  } else {
+    throw new Error("aggregation declined");
+  }
+};
+
 export const postService = {
   addPost,
   getAllPost,
   getPost,
   updatePost,
   deletePost,
+  learnAggregateAndGroupingService,
 };
 
 /**

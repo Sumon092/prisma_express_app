@@ -15,7 +15,6 @@ const addPost = async (req: Request, res: Response) => {
 };
 const getAllPost = async (req: Request, res: Response) => {
   const options = req.query;
-  console.log(options);
   try {
     const posts = await postService.getAllPost(options);
     console.log({ posts });
@@ -26,7 +25,6 @@ const getAllPost = async (req: Request, res: Response) => {
       data: posts.post,
     });
   } catch (error) {
-    console.log(error);
     res.send(error);
   }
 };
@@ -67,14 +65,32 @@ const deletePost = async (req: Request, res: Response) => {
       post,
     });
   } catch (error) {
-    console.log(error);
     res.send(error);
   }
 };
+const learnAggregateAndGroupingController = async (
+  req: Request,
+  res: Response
+) => {
+  console.log("aggregate route heated");
+  try {
+    const result = await postService.learnAggregateAndGroupingService();
+    res.send({
+      success: true,
+      message: "aggregation result",
+      result,
+    });
+  } catch (error: any) {
+    console.log(error.message, "what is error here");
+    res.send(error.message);
+  }
+};
+
 export const postController = {
   addPost,
   getAllPost,
   getPost,
   updatePost,
   deletePost,
+  learnAggregateAndGroupingController,
 };
