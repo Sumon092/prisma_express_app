@@ -1,5 +1,4 @@
 import { Post, PrismaClient } from "@prisma/client";
-import { serialize } from "v8";
 
 const prisma = new PrismaClient();
 
@@ -16,41 +15,58 @@ const addPost = async (data: Post): Promise<Post> => {
 
 const getAllPost = async (options: any) => {
   const { sortBy, sortOrder, searchTerm, page, limit } = options;
-  const skip = parseInt(limit) * parseInt(page) - parseInt(limit);
-  const take = parseInt(limit);
-  const post = await prisma.post.findMany({
-    skip,
-    take,
-    include: {
-      author: true,
-      categories: true,
-    },
-    orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
-        : { createdAt: "desc" },
-    where: {
-      OR: [
-        {
-          title: {
-            contains: searchTerm,
-            mode: "insensitive",
+  const skip = parseInt(limit) * parseInt(page) - parseInt(limit) || 0;
+  const take = parseInt(limit) || 10;
+  return await prisma.$transaction(async (tx) => {
+    const post = await tx.post.findMany({
+      skip,
+      take,
+      include: {
+        author: {
+          select: {
+            name: true,
+            email: true,
+            role: true,
           },
         },
-        {
-          author: {
-            name: {
+        categories: true,
+      },
+      orderBy:
+        sortBy && sortOrder
+          ? {
+              [sortBy]: sortOrder,
+            }
+          : { createdAt: "desc" },
+      where: {
+        OR: [
+          {
+            title: {
               contains: searchTerm,
               mode: "insensitive",
             },
           },
-        },
-      ],
-    },
+          {
+            author: {
+              name: {
+                contains: searchTerm,
+                mode: "insensitive",
+              },
+            },
+          },
+          {
+            author: {
+              role: {
+                contains: searchTerm,
+                mode: "insensitive",
+              },
+            },
+          },
+        ],
+      },
+    });
+    const total = await tx.post.count();
+    return { data: total, post };
   });
-  return post;
 };
 const getPost = async (id: number) => {
   const post = await prisma.post.findUnique({
@@ -65,10 +81,24 @@ const getPost = async (id: number) => {
   return post;
 };
 
+const updatePost = async (
+  id: number,
+  payload: Partial<Post>
+): Promise<Post> => {
+  const result = await prisma.post.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 export const postService = {
   addPost,
   getAllPost,
   getPost,
+  updatePost,
 };
 
 /**
