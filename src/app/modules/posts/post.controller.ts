@@ -57,9 +57,24 @@ const updatePost = async (req: Request, res: Response) => {
     res.send(error);
   }
 };
+const deletePost = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  try {
+    const post = await postService.deletePost(id);
+    res.send({
+      success: true,
+      message: "post deleted successfully",
+      post,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+};
 export const postController = {
   addPost,
   getAllPost,
   getPost,
   updatePost,
+  deletePost,
 };
