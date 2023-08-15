@@ -116,7 +116,6 @@ const learnAggregateAndGroupingService = async () => {
       categoryId: true,
     },
   });
-  console.log(result);
   if (result) {
     return result;
   } else {
